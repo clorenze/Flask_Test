@@ -92,11 +92,17 @@ def view_test3():
 
 @app.route('/notBroken', methods = ['POST', 'GET'])
 def writePage():
+    cori = False # used for checking if using Cori, since if not, no need to specify which core (haswell/knightslanding)
     env = "#!/bin/bash -l\n"
     if request.method == "POST":
         queue = request.form["queue"] + "\n"
         nodes = str(request.form["nodes"]) + "\n"
-        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
-    return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
+	time = str(request.form["hours"]) + ':' + str(request.form["minutes"]) + ':' + str(request.form["seconds"]) 
+	machine = request.form["machine"]
+	if machine != "edison":
+		cori = True
+	
+        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori)
+    return render_template('notBroken.html', env = env)
 #    time =
  #   coreType =
