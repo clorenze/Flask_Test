@@ -84,3 +84,19 @@ def view_test():
 @app.route('/test2')
 def view_test2():
     return render_template('app.html')
+
+@app.route('/broken')
+def view_test3():
+    return render_template('broken.html')
+
+
+@app.route('/notBroken', methods = ['POST', 'GET'])
+def writePage():
+    env = "#!/bin/bash -l\n"
+    if request.method == "POST":
+        queue = request.form["queue"] + "\n"
+        nodes = str(request.form["nodes"]) + "\n"
+        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
+    return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
+#    time =
+ #   coreType =

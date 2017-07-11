@@ -1,0 +1,470 @@
+{% extends "layout.html" %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+    <title>MyNERSC</title>
+
+    <!-- Core CSS - Include with every page -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- For tables -->
+    <link href="css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+
+    <!-- MyNERSC Custom CSS -->
+    <link href="css/mynersc.css" rel="stylesheet">
+
+    <!-- Darshan Charts -->
+    <link rel="stylesheet" href="css/darshan-charts.css">
+    <link rel="stylesheet" href="css/plugins/jquery-ui-1.10.4.custom.min.css">
+    <link rel="stylesheet" href="css/plugins/jQRangeSlider/iThing.css">
+    <link rel="stylesheet" href="css/plugins/bootstrap-select/bootstrap-select.min.css">
+
+    <!-- Datepicker Custom CSS -->
+    <link href="css/datepicker.css" rel="stylesheet">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-50239004-1', 'nersc.gov');
+      ga('send', 'pageview');
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-50239004-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+
+</head>
+{% block body %}
+
+
+    <div id="headerModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Job" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <h3 id="header-modal-label"></h3>
+          </div>
+          <div class="modal-body" id="headerModalBody">
+            <div id="header-modal-content">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="alertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Job" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body" id="alertModalBody">
+            <div id="alert-modal-content">
+              The alert system is currently a static-mock-up. Check back soon.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wrapper">
+
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.php" style="padding:1px 8px;"><table border=0 padding=0 cellspacing=0><tr><td>&nbsp;<img src="images/my.png" height=35></td><td><img src="images/NERSC-Small-Logo.png" height=40 border=0></td></tr></table></a>
+
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+
+                <li id="auth-spinner"><br>&nbsp;&nbsp;<img src="images/ajax-loader.gif">&nbsp;&nbsp;</li>
+                <li class="dropdown" style='display:none;' id='message-area'>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages" id="announcements">
+                      <center><img src="images/ajax-loader.gif"></center>
+                    </ul>
+                </li>
+
+                <li class="dropdown" style='display:none;' id='status-area'>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks" id="jobs-dropdown">
+                      <center><img src="images/ajax-loader.gif"></center>
+                    </ul>
+                </li>
+                <li class="dropdown" style='display:none;' id='alert-area'>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="javascript:null;">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> NERSC Alert System
+                                    <span class="pull-right text-muted small">Coming Soon</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="javascript:null;">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" style='display:none;' id='user-area'>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="profile.php"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href='javascript: logout();'><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </nav>
+
+        <nav class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search">
+                    </li>
+                    <li id=login-area style='display:none;'>
+                       <a href="login.php"><i class="fa fa-user fa-fw"></i> Sign In</a>
+                    </li>
+                    <li id=welcome-area style='display:none;'>
+                       <a href="profile.php"><i class="fa fa-user fa-fw"></i><text id='welcome-text'>Welcome</text></a>
+                    </li>
+
+                    <li>
+                        <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    </li>
+<li class="active">                        <a href="#"><i class="fa fa-table fa-fw"></i> Jobs<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                              <a href="script_generator.php"><i class="fa fa-file fa-fw"></i> Jobscript Generator</a>
+                            </li>
+                            <li>
+                              <a href="completedjobs.php"><i class="fa fa-archive fa-fw"></i> Completed Jobs</a>
+                            </li>
+                            <li>
+                                <a href="queues.php?machine=cori&full_name=Cori"><i class="fa fa-tasks fa-fw"></i> Cori Queues</a>
+                            </li>
+                            <li>
+                                <a href="queues.php?machine=edison&full_name=Edison"><i class="fa fa-tasks fa-fw"></i> Edison Queues</a>
+                            </li>
+                            <li>
+                                <a href="queues.php?machine=pdsf&full_name=PDSF"><i class="fa fa-tasks fa-fw"></i> PDSF Queues</a>
+                            </li>
+                            <li>
+                                <a href="backlog.php"><i class="fa fa-area-chart fa-fw"></i> Queue Backlog</a>
+                            </li>
+                            <li>
+                                <a href="jobcompletion.php"><i class="fa fa-area-chart fa-fw"></i> Job Completion </a>
+                            </li>
+<!--                             <li>
+                                <a href="queuewait.php">Queue Wait Times</a>
+                            </li> -->
+                            <li>
+                             <a href="darshan-charts.php"><i class="fa fa-hdd-o fa-fw"></i> Jobs IO Statistics</a>
+                            </li>
+                        </ul>
+                    </li>
+<li>                       <a href="#"><i class="fa fa-medkit fa-fw"></i> Center Status<span class="fa arrow"></span></a>
+                       <ul class="nav nav-second-level">
+                         <li>
+                           <a href="announcements-cs.php"><i class="fa fa-envelope fa-fw"></i> Announcements</a>
+                         </li>
+                         <!--<li>
+                           <a href="knleap.php"><i class="fa fa-server fa-fw"></i> Cori Phase II Early Access Program (KNLEAP)</a>
+                         </li>-->
+                         <li>
+                           <a href="benchmarks-cs.php"><i class="fa fa-bar-chart-o fa-fw"></i> Benchmarks Monitor</a>
+                         </li>
+                         <li>
+                           <a href="filesystems-cs.php"><i class="fa fa-sitemap fa-fw"></i> Filesystems Monitor</a>
+                         </li>
+                         <li>
+                           <a href="uptime-cs.php"><i class="fa fa-keyboard-o fa-fw"></i> Interactive Nodes</a>
+                         </li>
+                         <li>
+                           <a href="nowcomputing-cs.php"><i class="fa fa-table fa-fw"></i> Now Computing</a>
+                         </li>
+                         <li>
+                           <a href="outagecal-cs.php"><i class="fa fa-calendar fa-fw"></i> Outage Calendar</a>
+                         </li>
+                         <li>
+                           <a href="outagelog-cs.php"><i class="fa fa-book fa-fw"></i> Outage Log</a>
+                         </li>
+                         <li>
+                           <a href="usagesummary-cs.php"><i class="fa fa-line-chart fa-fw"></i> Usage Summary</a>
+                         </li>
+				            		 <li>
+          	              	<a href="jobsize.php"><i class="fa fa-area-chart fa-fw"></i> Job Size Charts</a>
+						             </li>
+			                   <li>
+        	                	<a href="libraryusage-cs.php"><i class="fa fa-tasks fa-fw"></i> Library Usage </a>
+		                  	 </li>
+                       </ul>
+                    </li>
+                    <li>
+                        <a href="filebrowser.php"><i class="fa fa-folder fa-fw"></i> File Browser</a>
+                    </li>
+                    <li>
+                        <a href="tickets.php"><i class="fa fa-ticket fa-fw"></i> My Tickets</a>
+                    </li>
+                    <li>
+                        <a href="data-mgt.php"><i class="fa fa-bar-chart-o fa-fw"></i> Data Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="https://nxcloud01.nersc.gov/nxwebplayer"><i class="fa fa-desktop fa-fw"></i> NX Desktop</a>
+                    </li>
+                    <li>
+                        <a href="https://jupyter.nersc.gov"><i class="fa fa-desktop fa-fw"></i> Jupyter Hub</a>
+                    </li>
+                    <li>
+                        <a href="changelog.php"><i class="fa fa-edit fa-fw"></i> Changelog</a>
+                    </li>
+                    <li>
+                        <a href="http://www.nersc.gov"><i class="fa fa-newspaper-o fa-fw"></i> NERSC Homepage</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+<h4 class='page-header'>Jobscript Generator</h4>                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+
+	                <div id="panel-general" class="panel panel-default">
+						<div class="panel-heading">
+							Job Information
+						</div>
+						<div class="panel-body">
+							This tool generates a batch script template which also realizes specific process and thread binding configurations.
+						</div>
+						<!-- /.panel-heading -->
+		                <div id="top-panel" class="panel-body">
+			                <div class="row">
+								<div class="col-md-6" id="panel-controls">
+									<div id="machine-group" class="form-group">
+										<label class="control-label">Machine</label>
+										<span class="help-block">Select the machine on which you want to submit your job.</span>
+										<select id='machine-select' class="form-control jobform">
+											<option value="edison">Edison</option>
+											<option value="cori-hsw">Cori - Haswell</option>
+											<option value="cori-knl">Cori - KNL</option>
+										</select>
+									</div>
+									<div id="appname-group" class="form-group">
+										<label class="control-label">Application Name</label>
+										<span class="help-block">Specify your application including the full path.</span>
+										<input id="appname-text" type="text" class="form-control" value="myapp.x">
+									</div>
+									<div id="jobname-group" class="form-group">
+										<label class="control-label">Job Name</label>
+										<span class="help-block">Specify a name for your job.</span>
+										<input id="jobname-text" type="text" class="form-control">
+									</div>
+									<div id="email-group" class="form-group">
+										<label class="control-label">Email Address</label>
+										<span class="help-block">Specify your email address to get notified when the job enters a certain state.</span>
+										<input id="email-text" type="email" class="form-control">
+									</div>
+									<div id="time-group" class="form-group">
+										<label class="control-label">Wallclock Time</label>
+										<span class="help-block">Specify the duration of the job.</span>
+										<div class="col-md-4">
+											<input id="wc-hours-text" type="number" class="form-control" min="0" value=0>
+											<span class="help-block">hours</span>
+										</div>
+										<div class="col-md-4">
+											<input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30>
+											<span class="help-block">minutes</span>
+										</div>
+										<div class="col-md-4">
+											<input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0>
+											<span class="help-block">seconds</span>
+										</div>
+									</div>
+									<div id="partitions-group" class="form-group">
+										<label class="control-label">Partition</label>
+										<span class="help-block">Select the partition you want to run your job on.</span>
+										<select id='partition-select' class="form-control jobform">
+											<option value="regular">regular</option>
+											<option value="debug">debug</option>
+										</select>
+									</div>
+									<div id="nodes-group" class="form-group">
+										<label class="control-label">Number of Nodes</label>
+										<span class="help-block">How many nodes are used?</span>
+										<input id="nodes-text" type="number" class="form-control" min="1" value=1>
+									</div>
+
+
+									<ul id="mode-nav" class="nav nav-tabs">
+										<li id="basic-tab-selector" class="active nav-tab-button"><a href="#basic-tab" data-toggle="tab" mynote="basic">Basic Thread Binding</a></li>
+										<li id="advanced-tab-selector" class="nav-tab-button"><a href="#advanced-tab" data-toggle="tab" mynote="cori">Advanced Thread Binding</a></li>
+									</ul>
+
+
+                					<div class="tab-content">
+
+										<!-- Basic interface -->
+										<div id="basic-tab" class="tab-pane fade in active">
+											<div id="panel-basic" class="panel-body">
+												<div id="processes-group-basic" class="form-group">
+													<label class="control-label">Processes per Node</label>
+													<span class="help-block">How many processes, e.g. MPI ranks per node, do you want to use?</span>
+													<input id="process-text-basic" type="number" class="form-control" min="1" value=1>
+												</div>
+												<div id="threads-group-basic" class="form-group">
+													<label class="control-label">Threads per Process</label>
+													<span class="help-block">How many threads per process do you want to use? Note that SLURM currently only supports jobs which use the same number of processor per process.</span>
+													<input id="threads-text-basic" type="number" class="form-control" min="1" value=1>
+												</div>
+                        					</div>
+                    					</div>
+
+										<!-- Advanced interface -->
+										<div id="advanced-tab" class="tab-pane fade in">
+											<div id="panel-advanced" class="panel-body">
+												<div id="processes-group-advanced" class="form-group">
+													<label class="control-label">Processes per Node</label>
+													<span class="help-block">How many processes, e.g. MPI ranks per node, do you want to use?</span>
+													<input id="process-text-advanced" type="number" class="form-control" min="1" value=1>
+												</div>
+												<div id="cores-group-advanced" class="form-group">
+													<label class="control-label">Cores per Process</label>
+													<span class="help-block">How many cores per process do you want to use? Note that SLURM currently only supports jobs which use the same number of processor per process.</span>
+													<input id="cores-text-advanced" type="number" class="form-control" min="1" value=1>
+												</div>
+												<div id="hyperthreads-group-advanced" class="form-group">
+													<label class="control-label">Hyper-Threads</label>
+													<span class="help-block">Select how many threads per core do you want to use.</span>
+													<select id='hyperthreads-select-advanced' class="form-control jobform">
+														<option value="1">1</option>
+														<option value="2">2</option>
+													</select>
+												</div>
+												<div id="layout-group-advanced" class="form-group">
+													<label class="control-label">Layout</label>
+													<span class="help-block">Select a thread layout.</span>
+													<select id='layout-select-advanced' class="form-control jobform">
+														<option value="spread">spread (optimal for memory bandwidth)</option>
+														<option value="close">close (optimal for cache locality)</option>
+													</select>
+												</div>
+		               						</div>
+										</div>
+
+									<!-- tab group -->
+									</div>
+
+								</div>
+								<div class="col-md-6" id="panel-controls">
+									<div id="output-group" class="form-group">
+										<textarea class="form-control" rows="30" id="script-output" style="resize: vertical" readonly="true">Your script will be displayed here.</textarea>
+									</div>
+								</div>
+			                </div>
+	                	</div>
+	                </div>
+
+	                <!--testing -->
+            		<!--<div class="panel panel-default" id="d3container">
+	            		<!<svg width='796' height='448'>
+            		</div>-->
+
+            		<div class="panel panel-default">
+						<input type="submit" id="generate-button" value="Generate Script" class="btn btn-submit btn-primary btn-block" onClick="javascript: generateScript();" />
+            		</div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="js/sb-admin.js"></script>
+
+    <script src="js/mynewt.js"></script>
+    <script src="js/mynersc.js"></script>
+
+    <script src="js/plugins/highcharts-3/js/highcharts.js"></script>
+    <script src="js/plugins/highcharts-3/js/modules/exporting.js"></script>
+
+	<!-- D3 -->
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+
+	<!-- Script generator file -->
+    <script src="script_generator.js"></script>
+
+    <script>
+      myCheckAuth();
+      function checkAuthCallback() {
+documentCallback();      }
+    </script>
+
+
+{% endbody %}
+</html>
+
+
