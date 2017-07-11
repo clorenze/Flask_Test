@@ -1,7 +1,0 @@
-<h1>{{ env }}</h1>
-<h1>#SBATCH -p {{ queue }}</h1>
-<h1>#SBATCH -N {{ nodes }}</h1>
-<h1>#SBATCH -t {{ time }}</h1>
-{% if machine != "edison" %}
-<h1>#SBATCH -c {{ machine }}</h1>
-{% endif %}
