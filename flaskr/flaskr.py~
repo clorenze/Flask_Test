@@ -9,7 +9,7 @@ app.config.from_object(__name__)
 app.config.update(dict(
     DATABASE = os.path.join(app.root_path, 'flaskr.db'),
     SECRET_KEY = 'development key',
-    USERNAME = 'admin', 
+    USERNAME = 'admin',
     PASSWORD = 'default'
 ))
 
@@ -76,8 +76,6 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
-<<<<<<< Updated upstream
-=======
 
 
 @app.route('/test')
@@ -95,17 +93,21 @@ def view_test3():
 
 @app.route('/notBroken', methods = ['POST', 'GET'])
 def writePage():
-    cori = False # used for checking if using Cori, since if not, no need to specify which core (haswell/knightslanding)
     env = "#!/bin/bash -l\n"
     if request.method == "POST":
         queue = request.form["queue"] + "\n"
         nodes = str(request.form["nodes"]) + "\n"
+<<<<<<< Updated upstream
+        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
+    return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
+=======
         time = str(request.form["hours"]) + ':' + str(request.form["minutes"]) + ':' + str(request.form["seconds"]) 
         machine = request.form["machine"]
 	if machine != "edison":
 		cori = True
         return render_template('notBroken.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori)
     return render_template('notBroken.html', env = env)
+>>>>>>> Stashed changes
 #    time =
  #   coreType =
 
@@ -191,7 +193,7 @@ def writeIterBatch():
     THREADS = 32 * (NODES - 1) # Threads are equal to 32 * nodes - 1 because task farmer requires one node of its own for task farmer server
     DIRECTORY_NAME = "testIter" # name of directory on Cori in which everything is being run
 
-    tasks = open('tasks', 'w')
+    tasks = open('tasks.txt', 'w')
     for x in range(11,129):
         tasks.write("wrapper.sh " + str(x) + "\n")
     batch = open('testBatch', 'w')
@@ -211,7 +213,7 @@ def writeIterBatch():
     batch.write("runcommands.sh tasks.txt")
     batch.close()
 
-    wrapper = open('wrapper', 'w')
+    wrapper = open('wrapper.sh', 'w')
     wrapper.write("cd /global/homes/c/clorenze/" + DIRECTORY_NAME+"\n")
     wrapper.write("python SVR $1")
     wrapper.close()
@@ -221,4 +223,3 @@ def writeIterBatch():
 
 
 
->>>>>>> Stashed changes

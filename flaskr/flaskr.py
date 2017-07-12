@@ -97,17 +97,13 @@ def writePage():
     if request.method == "POST":
         queue = request.form["queue"] + "\n"
         nodes = str(request.form["nodes"]) + "\n"
-<<<<<<< Updated upstream
-        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
-    return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
-=======
         time = str(request.form["hours"]) + ':' + str(request.form["minutes"]) + ':' + str(request.form["seconds"]) 
         machine = request.form["machine"]
 	if machine != "edison":
 		cori = True
         return render_template('notBroken.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori)
     return render_template('notBroken.html', env = env)
->>>>>>> Stashed changes
+
 #    time =
  #   coreType =
 
