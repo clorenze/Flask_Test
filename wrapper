@@ -1,0 +1,2 @@
+cd /global/homes/c/clorenze/testIter
+python SVR $1

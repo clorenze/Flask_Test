@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+import pandas as pd
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -96,7 +97,129 @@ def writePage():
     if request.method == "POST":
         queue = request.form["queue"] + "\n"
         nodes = str(request.form["nodes"]) + "\n"
+<<<<<<< Updated upstream
         return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
     return render_template('notBroken.html', env = env, queue = queue, nodes = nodes)
+=======
+        time = str(request.form["hours"]) + ':' + str(request.form["minutes"]) + ':' + str(request.form["seconds"]) 
+        machine = request.form["machine"]
+	if machine != "edison":
+		cori = True
+        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori)
+    return render_template('notBroken.html', env = env)
+>>>>>>> Stashed changes
 #    time =
  #   coreType =
+
+
+@app.route('/specific', methods = ['POST', 'GET'])
+def writeSpecificBatch():
+    TIME = "04:00:00"
+    QUEUE = "debug"
+    CORETYPE = "haswell"
+    NODES = 8
+
+    DIRECTORY_NAME = "demo" # name of directory on Cori in which everything is being run
+
+    AllData = pd.read_csv("/home/casey/flaskr/flaskr/ChenDataSet.csv")
+
+    rowCount=AllData.shape[0]
+    columnCount = AllData.shape[1]
+
+    #print(AllData)
+
+    #Converts IDs to set to remove duplicates
+    uniqueIDs = set(AllData["ID"])
+
+    index = []
+    #Finds first and last index of each ID, then appends them to index list
+    def foo(lst, x):
+	    firstRow = lst.index(x)
+	    lastRow = len(lst) -1 - lst[::-1].index(x)
+	    index.append((firstRow,lastRow))
+
+    #print(firstRow)
+    #print(lastRow)
+
+    sentinal = 0
+    #executes foo on each ID in data, sentinal variable terminates function after 3 ID's for reduced dataset
+    for y in uniqueIDs:
+	    foo(list(AllData["ID"]), y)
+	    sentinal += 1
+	    if sentinal == 3:
+		    break
+
+    results = open('indices', 'w')
+    results.write(str(index))
+    results.close()
+
+    tasks = open('specificProteinClassification.txt', 'w')
+
+    for z in range(len(index)):
+	    for y in range(len(index)):
+		    tasks.write("wrapper.sh ChenDataSet.csv SVR  \"(10,129)\" \"(" + str(index[z][0]) + "," + str(index[z][1]) + ")\" \"(" +str(index[y][0]) + "," + str(index[y][1]) + ")\" 131\n")
+    tasks.close()
+
+		
+    batch = open('testBatch', 'w')
+
+    batch.write("#!/bin/bash -l\n\n")
+    batch.write("#SBATCH -N ")
+    batch.write(str(NODES) + "\n")
+    batch.write("#SBATCH -t ")
+    batch.write(TIME + "\n")
+    batch.write("#SBATCH -p " + QUEUE + "\n")
+    batch.write("#SBATCH -C " + CORETYPE + "\n")
+    batch.write("module load python\n")
+    batch.write("module load deeplearning\n")
+
+    batch.write("export PATH=$PATH:/usr/common/tig/taskfarmer/1.5/bin:$(pwd)\n")
+    batch.write("export THREADS=224\n")
+    batch.write("runcommands.sh specificProteinClassification.txt")
+    batch.close()
+
+    wrapper = open('wrapper', 'w')
+    wrapper.write("cd /global/homes/c/clorenze/" + DIRECTORY_NAME+"\n")
+    wrapper.write("python protein_ML-test.py $1 $2 $3 $4 $5 $6")
+    wrapper.close()
+    return render_template('notBroken.html')
+
+@app.route('/iterative', methods = ['POST', 'GET'])
+def writeIterBatch():
+    TIME = "04:00:00"
+    QUEUE = "regular"
+    CORETYPE = "haswell"
+    NODES = 6
+    THREADS = 32 * (NODES - 1) # Threads are equal to 32 * nodes - 1 because task farmer requires one node of its own for task farmer server
+    DIRECTORY_NAME = "testIter" # name of directory on Cori in which everything is being run
+
+    tasks = open('tasks.txt', 'w')
+    for x in range(11,129):
+        tasks.write("wrapper.sh " + str(x) + "\n")
+    batch = open('testBatch', 'w')
+
+    batch.write("#!/bin/bash -l\n\n")
+    batch.write("#SBATCH -N ")
+    batch.write(str(NODES) + "\n")
+    batch.write("#SBATCH -t ")
+    batch.write(TIME + "\n")
+    batch.write("#SBATCH -p " + QUEUE + "\n")
+    batch.write("#SBATCH -C " + CORETYPE + "\n")
+    batch.write("module load python\n")
+    batch.write("module load deeplearning\n")
+
+    batch.write("export PATH=$PATH:/usr/common/tig/taskfarmer/1.5/bin:$(pwd)\n")
+    batch.write("export THREADS=" + str(THREADS) + "\n")
+    batch.write("runcommands.sh tasks.txt")
+    batch.close()
+
+    wrapper = open('wrapper.sh', 'w')
+    wrapper.write("cd /global/homes/c/clorenze/" + DIRECTORY_NAME+"\n")
+    wrapper.write("python SVR $1")
+    wrapper.close()
+    return render_template('notBroken.html')
+
+
+
+
+

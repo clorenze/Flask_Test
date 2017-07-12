@@ -9,6 +9,7 @@
 
 
 <div class="tab">
+<<<<<<< Updated upstream
   <button class="tablinks" onclick="openCity(event, 'Page1')">Page1</button>
   <button class="tablinks" onclick="openCity(event, 'Page2')">Page2</button>
 
@@ -21,14 +22,23 @@
 <div id="Page2" class="tabcontent">
   <h3>Paris</h3>
   <p>Paris is the capital of France.</p>
+=======
+  <button class="tablinks" onclick="openCity(event, 'Page1')" id="defaultOpen">Batch Settings</button>
+  <button class="tablinks" onclick="openCity(event, 'Page2')">TaskFarmer Settings</button>
+  <button class="tablinks" onclick="openCity(event, 'Page3')">Page3</button>
+>>>>>>> Stashed changes
 </div>
 
 
 
 
+<<<<<<< Updated upstream
 
 
 
+=======
+<form action="{{ url_for('writeSpecificBatch') }}" method=post>
+>>>>>>> Stashed changes
 
 
     <div id="Page1" class="tabcontent">
@@ -69,6 +79,102 @@
    </dl>
 
    </div>
+<<<<<<< Updated upstream
 </form>
+=======
+
+<div id="Page2" class="tabcontent">
+<dl>
+      <dt>Pre-Made Jobs
+      <dt>
+         <select name = "job">
+            <option value="none">None</option>
+            <option value="specific">Specific Protein Training</option>
+            <option value="iterative">Iterative Column Removal</option>
+         </select>
+      <dt>Number of Tasks:
+      <dt><input type= number name=tasks min = 1>
+      <dt>
+      <dt><input type= file name=SelectFile>
+      <dt>
+         <select name = "queue">
+            <option value="debug">Debug</option>
+            <option value="regular">Regular</option>
+         </select>
+      </dt>
+      <div id="time-group" class="form-group">
+      <label class="control-label">Wallclock Time</label>
+      <span class="help-block">Specify the duration of the job.</span>
+      <div class="col-md-4">
+         <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
+         <span class="help-block">hours</span>
+      </div>
+      <div class="col-md-4">
+         <input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30 name = "minutes">
+         <span class="help-block">minutes</span>
+      </div>
+      <div class="col-md-4">
+         <input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0 name = "seconds">
+         <span class="help-block">seconds</span>
+      </div>
+      <dd><input type=submit value=Submit>
+   </dl>
+</div>
+
+<div id="Page3" class="tabcontent">
+<dl>
+      <dt>Machine:
+      <dt>
+         <select name = "machine">
+            <option value="haswell">Cori-Haswell</option>
+            <option value="knl">Cori-KnightsLanding</option>
+            <option value="edison">Edison</option>
+         </select>
+      <dt>Number of Tasks:
+      <dt><input type= number name=tasks min = 1>
+      <dt>
+      <dt><input type= file name=SelectFile>
+      <dt>
+         <select name = "queue">
+            <option value="debug">Debug</option>
+            <option value="regular">Regular</option>
+         </select>
+      </dt>
+      <div id="time-group" class="form-group">
+      <label class="control-label">Wallclock Time</label>
+      <span class="help-block">Specify the duration of the job.</span>
+      <div class="col-md-4">
+         <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
+         <span class="help-block">hours</span>
+      </div>
+      <div class="col-md-4">
+         <input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30 name = "minutes">
+         <span class="help-block">minutes</span>
+      </div>
+      <div class="col-md-4">
+         <input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0 name = "seconds">
+         <span class="help-block">seconds</span>
+      </div>
+      <dd><input type=submit value=Submit>
+   </dl>
+</div>
+
+
+
+
+
+
+</form>
+<form action="{{ url_for('writeIterBatch') }}" method=post>
+
+<input type=submit value=SubmitIter>
+
+</form>
+
+<script>
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+>>>>>>> Stashed changes
 {% endblock %}
 

@@ -1,0 +1,9 @@
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(0,83)" "(0,83)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(0,83)" "(84,172)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(0,83)" "(173,256)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(84,172)" "(0,83)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(84,172)" "(84,172)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(84,172)" "(173,256)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(173,256)" "(0,83)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(173,256)" "(84,172)" 131
+wrapper.sh ChenDataSet.csv SVR  "(10,129)" "(173,256)" "(173,256)" 131
