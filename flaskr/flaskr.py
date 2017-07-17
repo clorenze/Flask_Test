@@ -39,14 +39,14 @@ def init_db():
 def initdb_command():
     init_db()
     print("Initialized the database.")
-
+"""
 @app.route('/')
 def show_entries():
     db = get_db()
     cur = db.execute('select title, text from entries order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries = entries)
-
+"""
 @app.route('/add', methods = ['POST'])
 def add_entry():
     if not session.get('logged_in'):
@@ -78,20 +78,12 @@ def logout():
     return redirect(url_for('show_entries'))
 
 
-@app.route('/test')
-def view_test():
-    return render_template('test.html')
-
-@app.route('/test2')
+@app.route('/')
 def view_test2():
     return render_template('app.html')
 
-@app.route('/broken')
-def view_test3():
-    return render_template('broken.html')
 
-
-@app.route('/notBroken', methods = ['POST', 'GET'])
+@app.route('/display', methods = ['POST', 'GET'])
 def writePage():
     env = "#!/bin/bash -l\n"
     if request.method == "POST":
@@ -99,10 +91,11 @@ def writePage():
         nodes = str(request.form["nodes"]) + "\n"
         time = str(request.form["hours"]) + ':' + str(request.form["minutes"]) + ':' + str(request.form["seconds"]) 
         machine = request.form["machine"]
+        algorithm = "srun ./protein_ML.py" +  request.form["selectFile"].name + " " + request.form["algorithm"] 
 	if machine != "edison":
 		cori = True
-        return render_template('notBroken.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori)
-    return render_template('notBroken.html', env = env)
+        return render_template('display.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori, algorithm = algorithm)
+    return render_template('display.html', env = env)
 
 #    time =
  #   coreType =
@@ -186,7 +179,7 @@ def writeIterBatch():
     QUEUE = "regular"
     CORETYPE = "haswell"
     NODES = 6
-    THREADS = 32 * (NODES - 1) # Threads are equal to 32 * nodes - 1 because task farmer requires one node of its own for task farmer server
+    THREADS = 32 
     DIRECTORY_NAME = "testIter" # name of directory on Cori in which everything is being run
 
     tasks = open('tasks.txt', 'w')
