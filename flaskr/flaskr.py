@@ -91,9 +91,9 @@ def writePage():
         nodes = str(request.form["nodes"]) + "\n"
         time = str(request.form["hours"]) + ':' + str(request.form["minutes"]) + ':' + str(request.form["seconds"]) 
         machine = request.form["machine"]
-        algorithm = "srun ./protein_ML.py" +  request.form["selectFile"].name + " " + request.form["algorithm"] 
-	if machine != "edison":
-		cori = True
+        algorithm = "srun ./protein_ML.py {} {}".format(request.form["SelectFile"], request.form["algorithm"])
+        if machine != "edison":
+            cori = True
         return render_template('display.html', env = env, queue = queue, nodes = nodes, time = time, machine = machine, cori = cori, algorithm = algorithm)
     return render_template('display.html', env = env)
 

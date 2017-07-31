@@ -1,4 +1,4 @@
-<script src="{{url_for('static', filename='stupid.js')}}"></script>
+<script src="{{url_for('static', filename='scripts.js')}}"></script>
 
 {% extends "layout.html" %}
 {% block body %}
@@ -10,9 +10,10 @@
 
 <div class="tab">
 
-  <button class="tablinks" onclick="openCity(event, 'Page1')" id="defaultOpen">Batch Settings</button>
-  <button class="tablinks" onclick="openCity(event, 'Page2')">TaskFarmer Settings</button>
-  <button class="tablinks" onclick="openCity(event, 'Page3')">Algorithm Settings</button>
+  <button class="tablinks" onclick="openPage(event, 'Page1')" id="defaultOpen">Batch Settings</button>
+  <button class="tablinks" onclick="openPage(event, 'Page2')">TaskFarmer Settings</button>
+  <button class="tablinks" onclick="openPage(event, 'Page3')">Algorithm Settings</button>
+  <button class="tablinks" onclick="openPage(event, 'Page4')">Dataset Modification</button>
 
 </div>
 
@@ -35,9 +36,9 @@
             <option value="edison">Edison</option>
          </select>
       <dt>Nodes:
-      <dt><input type= "number" name=nodes min = 1>
+      <dt><input type= number name=nodes min = 1>
       <dt>
-      <dt><input type= "file" name= "SelectFile">
+      <dt><input type= file name= "SelectFile">
       <dt>
          <select name = "queue">
             <option value="debug">Debug</option>
@@ -45,8 +46,8 @@
          </select>
       </dt>
       <div id="time-group" class="form-group">
-      <label class="control-label">Wallclock Time</label>
-      <span class="help-block">Specify the duration of the job.</span>
+      <label class="control-label">Wallclock Time: </label>
+      <span class="help-block">specify the duration of the job.</span>
       <div class="col-md-4">
          <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
          <span class="help-block">hours</span>
@@ -74,32 +75,6 @@
             <option value="specific">Specific Protein Training</option>
             <option value="iterative">Iterative Column Removal</option>
          </select>
-      <dt>Number of Tasks:
-      <dt><input type= number name=tasks min = 1>
-      <dt>
-      <dt><input type= file name=SelectFile>
-      <dt>
-         <select name = "queue">
-            <option value="debug">Debug</option>
-            <option value="regular">Regular</option>
-         </select>
-      </dt>
-      <div id="time-group" class="form-group">
-      <label class="control-label">Wallclock Time</label>
-      <span class="help-block">Specify the duration of the job.</span>
-      <div class="col-md-4">
-         <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
-         <span class="help-block">hours</span>
-      </div>
-      <div class="col-md-4">
-         <input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30 name = "minutes">
-         <span class="help-block">minutes</span>
-      </div>
-      <div class="col-md-4">
-         <input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0 name = "seconds">
-         <span class="help-block">seconds</span>
-      </div>
-      <dd><input type=submit value=Submit>
    </dl>
 </div>
 
@@ -112,36 +87,11 @@
             <option value="xgboost">XGBoost</option>
             <option value="dropout">Dropout</option>
          </select>
-      <dt>Number of Tasks:
-      <dt><input type= number name=tasks min = 1>
-      <dt>
-      <dt><input type= file name=SelectFile>
-      <dt>
-         <select name = "queue">
-            <option value="debug">Debug</option>
-            <option value="regular">Regular</option>
-         </select>
-      </dt>
-      <div id="time-group" class="form-group">
-      <label class="control-label">Wallclock Time</label>
-      <span class="help-block">Specify the duration of the job.</span>
-      <div class="col-md-4">
-         <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
-         <span class="help-block">hours</span>
-      </div>
-      <div class="col-md-4">
-         <input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30 name = "minutes">
-         <span class="help-block">minutes</span>
-      </div>
-      <div class="col-md-4">
-         <input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0 name = "seconds">
-         <span class="help-block">seconds</span>
-      </div>
-      <dd><input type=submit value=Submit>
    </dl>
 </div>
 
-
+<div id="Page4" class="tabcontent">
+</div>
 
 
 
