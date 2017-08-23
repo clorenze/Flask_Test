@@ -3,7 +3,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path = "/flaskr/static")
 app.config.from_object(__name__)
 
 app.config.update(dict(
@@ -83,7 +83,7 @@ def view_test2():
     return render_template('app.html')
 
 
-@app.route('/display', methods = ['POST', 'GET'])
+@app.route('/displ.csay', methods = ['POST', 'GET'])
 def writePage():
     env = "#!/bin/bash -l\n"
     if request.method == "POST":
@@ -171,7 +171,7 @@ def writeSpecificBatch():
     wrapper.write("cd /global/homes/c/clorenze/" + DIRECTORY_NAME+"\n")
     wrapper.write("python protein_ML-test.py $1 $2 $3 $4 $5 $6")
     wrapper.close()
-    return render_template('notBroken.html')
+    return render_template('testDisplay.html')
 
 @app.route('/iterative', methods = ['POST', 'GET'])
 def writeIterBatch():
@@ -206,7 +206,7 @@ def writeIterBatch():
     wrapper.write("cd /global/homes/c/clorenze/" + DIRECTORY_NAME+"\n")
     wrapper.write("python SVR $1")
     wrapper.close()
-    return render_template('notBroken.html')
+    return render_template('testDisplay.html')
 
 
 

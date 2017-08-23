@@ -1,108 +1,92 @@
-<script src="{{url_for('static', filename='scripts.js')}}"></script>
-
+<script src="{{url_for('static', filename='scripts4.js')}}"></script>
 {% extends "layout.html" %}
 {% block body %}
 {% if error %}
-
 <p class=error><strong>Error:</strong> {{ error }}{% endif %}
-
-
-
 <div class="tab">
-
-  <button class="tablinks" onclick="openPage(event, 'Page1')" id="defaultOpen">Batch Settings</button>
-  <button class="tablinks" onclick="openPage(event, 'Page2')">TaskFarmer Settings</button>
-  <button class="tablinks" onclick="openPage(event, 'Page3')">Algorithm Settings</button>
-  <button class="tablinks" onclick="openPage(event, 'Page4')">Dataset Modification</button>
-
+    <button class="tablinks" onclick="openPage(event, 'Page1')" id="defaultOpen">Batch Settings</button>
+    <button class="tablinks" onclick="openPage(event, 'Page2')">TaskFarmer Settings</button>
+    <button class="tablinks" onclick="openPage(event, 'Page3')">Algorithm Settings</button>
+    <button class="tablinks" onclick="openPage(event, 'Page4')">Dataset Modification</button>
 </div>
-
-
-
-
-
 <form action="{{ url_for('writePage') }}" method=post>
-
-
-
-
     <div id="Page1" class="tabcontent">
-   <dl>
-      <dt>Machine:
-      <dt>
-         <select name = "machine">
-            <option value="haswell">Cori-Haswell</option>
-            <option value="knl">Cori-KnightsLanding</option>
-            <option value="edison">Edison</option>
-         </select>
-      <dt>Nodes:
-      <dt><input type= number name=nodes min = 1>
-      <dt>
-      <dt><input type= file name= "SelectFile">
-      <dt>
-         <select name = "queue">
-            <option value="debug">Debug</option>
-            <option value="regular">Regular</option>
-         </select>
-      </dt>
-      <div id="time-group" class="form-group">
-      <label class="control-label">Wallclock Time: </label>
-      <span class="help-block">specify the duration of the job.</span>
-      <div class="col-md-4">
-         <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
-         <span class="help-block">hours</span>
-      </div>
-      <div class="col-md-4">
-         <input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30 name = "minutes">
-         <span class="help-block">minutes</span>
-      </div>
-      <div class="col-md-4">
-         <input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0 name = "seconds">
-         <span class="help-block">seconds</span>
-      </div>
-      <dd><input type=submit value=Submit>
-   </dl>
-
-   </div>
-
-
-<div id="Page2" class="tabcontent">
-<dl>
-      <dt>Pre-Made Jobs
-      <dt>
-         <select name = "job">
-            <option value="none">None</option>
-            <option value="specific">Specific Protein Training</option>
-            <option value="iterative">Iterative Column Removal</option>
-         </select>
-   </dl>
-</div>
-
-<div id="Page3" class="tabcontent">
-<dl>
-      <dt>Algorithm
-      <dt>
-         <select name = "algorithm">
-            <option value="svr">SVR</option>
-            <option value="xgboost">XGBoost</option>
-            <option value="dropout">Dropout</option>
-         </select>
-   </dl>
-</div>
-
-<div id="Page4" class="tabcontent">
-</div>
-
-
-
+    <dl>
+        <dt>Machine:
+        <dt>
+            <select name = "machine">
+                <option value="haswell">Cori-Haswell</option>
+                <option value="knl">Cori-KnightsLanding</option>
+                <option value="edison">Edison</option>
+            </select>
+        <dt>Nodes:
+        <dt><input type= number name=nodes min = 1>
+        <dt>
+        <dt><input type= file name= "SelectFile">
+        <dt>
+            <select name = "queue">
+                <option value="debug">Debug</option>
+                <option value="regular">Regular</option>
+            </select>
+        </dt>
+        <div id="time-group" class="form-group">
+            <label class="control-label">Wallclock Time: </label>
+            <span class="help-block">specify the duration of the job.</span>
+            <div class="col-md-4">
+                <input id="wc-hours-text" type="number" class="form-control" min="0" value=0 name = "hours">
+                <span class="help-block">hours</span>
+            </div>
+            <div class="col-md-4">
+                <input id="wc-minutes-text" type="number" class="form-control" min="0" max="59" value=30 name = "minutes">
+                <span class="help-block">minutes</span>
+            </div>
+            <div class="col-md-4">
+                <input id="wc-seconds-text" type="number" class="form-control" min="0" max="59" value=0 name = "seconds">
+                <span class="help-block">seconds</span>
+            </div>
+            <dd>
+    </dl>
+    </div>
+    <div id="Page2" class="tabcontent">
+        <dl>
+            <dt>Pre-Made Jobs
+            <dt>
+                <select name = "job">
+                    <option value="none">None</option>
+                    <option value="specific">Specific Protein Training</option>
+                    <option value="iterative">Iterative Column Removal</option>
+                </select>
+        </dl>
+    </div>
+    <div id="Page3" class="tabcontent">
+        <dl>
+            <dt>Algorithm
+            <dt>
+                <select name = "algorithm" onchange="showDiv(event, 'this')">
+                    <option value="svr">SVR</option>
+                    <option value="xgboost">XGBoost</option>
+                    <option value="dropout">Dropout</option>
+                </select>
+        </dl>
+        <div id ="svr_options">
+            Epsilon Value: <input type= number name=nodesSVR min = 1>
+            Feature/Column List: <input type= text name= columns>
+            Model/Row List: <input type= text name= rows>
+        </div>
+<!--        <div id ="xgboost_options">
+            <input type= number name=nodesXG min = 100>
+        </div>
+        <div id ="dropout_options">
+            <input type= number name=nodesDROP min = 10000>
+        </div> -->
+    </div>
+    <div id="Page4" class="tabcontent"></div>
+<input type=submit value=Submit>
 </form>
-
-
-
 <script>
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
 </script>
-
 {% endblock %}
+
 
